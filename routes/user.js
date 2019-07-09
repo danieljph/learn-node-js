@@ -1,6 +1,9 @@
 const express = require('express');
 const HashMap = require('hashmap');
+const LOGGER = rootRequire('./utils/logger');
 const asyncHandler = require('express-async-handler');
+const properties = rootRequire('./utils/properties');
+
 
 const router = express.Router();
 let counterId = 1;
@@ -12,6 +15,9 @@ const sleep = (milliseconds) => {
 
 router.get('/:id(\\d+)/', asyncHandler(async (req, res, next) =>
 {
+  LOGGER.info("HELLO TEST");
+  LOGGER.info(`Get by ID ${req.params.id}`);
+  LOGGER.error(`Error by ID ${req.params.id}`);
   const result = storage.get(+req.params.id);
 
   if(result)
@@ -21,7 +27,7 @@ router.get('/:id(\\d+)/', asyncHandler(async (req, res, next) =>
   else
   {
     await sleep(3000);
-    throw {status:404, message:"Item not found.", stack: "-"};
+    throw {status:404, message:'Item not found.', stack: '-'};
   }
 
   next();
@@ -30,7 +36,12 @@ router.get('/:id(\\d+)/', asyncHandler(async (req, res, next) =>
 router.post('/:username', (req, res, next) =>
 {
   const id = counterId++;
-  const result = {id: id, username:req.params.username, lastName: req.body.lastName};
+  const result = {
+    id: id,
+    username:req.params.username,
+    lastName: req.body.lastName,
+    appName: properties.get('app.name')
+  };
   storage.set(id, result);
   res.send(result);
   next();
