@@ -1,3 +1,13 @@
 app:
   version: 1.0
   name: Learn Node JS - Production ${app.version}
+db:
+  connection:
+    host: 10.80.0.13
+    port: 6333
+    user: qa_automation
+    password: Jz43S0xG852hcxmG3BAbrs7YWml6x5c4
+    database: qa_automation
+  pool:
+    min: 1
+    max: 2

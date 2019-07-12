@@ -3,11 +3,27 @@ global.rootRequire = name => require(`${__dirname}/${name}`);
 
 const express = require('express');
 const path = require('path');
-const logger = require('morgan');
+const morgan = require('morgan');
 const properties = require('./utils/properties');
 const yaml = require('./utils/yaml');
+const knex = require('./utils/knex');
+const Person = require('./entity/Person');
+
 console.log(`Properties: ${properties.get('app.name')}`);
 console.log(`Yaml      : ${yaml.app.name}`);
+
+// knex.select().from('failed_scenarios').timeout(1000)
+//     .then(rs => {
+//         rs.forEach(row => console.log(row['bamboo_build_result_key']));
+//     });
+
+const test = async()=>
+{
+    const person = await new Person().findAll();
+    console.log(person);
+};
+
+test();
 
 const indexRouter = require('./routes/index');
 const userRouter = require('./routes/user');
@@ -33,7 +49,7 @@ app.use(function(req, res, next)
     next();
 });
 
-app.use(logger('dev'));
+app.use(morgan('dev'));
 app.use(express.json());
 app.use(bodyParser.xml());
 app.use(express.urlencoded({ extended: false }));
